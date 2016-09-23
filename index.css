@@ -1,0 +1,25 @@
+.pallet-pixel {
+   border: 1px solid black;
+}
+
+.canvas-pixel {
+   border: 1px solid black;
+}
+
+#outer-container {
+  width: 100%
+}
+
+#canvas {
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+  margin: auto;
+}
+
+#pallet {
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+  margin: 10px auto;
+}
