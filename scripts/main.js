@@ -15,6 +15,7 @@ window.onload = function main() {
   buildPallet(undefined, 30);
   buildCanvas(40, 40, 13);
 
+  // Capture mouse state for click and drag features
   window.addEventListener('mousedown', function() {
     mouseIsDown = true;
   });
@@ -22,14 +23,23 @@ window.onload = function main() {
   window.addEventListener('mouseup', function() {
     mouseIsDown = false;
   });
+
+  // Bind the generate gradient event
+  document.getElementById('generate-gradient-button').addEventListener('click', handleGradientGeneration);
+}
+
+function handleGradientGeneration(event) {
+  var newColors = createGradient();
+  buildPallet(newColors);
 }
 
 /**
  * Builds the color pallet out of an array of input colors. Each item in the pallet
  * is a div, and has an event listener which sets the brush color on click.
  */
-function buildPallet(colors, pxSize = 10) {
+function buildPallet(colors, pxSize = 30) {
   let pallet = document.getElementById('pallet');
+  pallet.innerHTML = '';
 
   if(colors === undefined) {
     colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'white'];
@@ -57,7 +67,7 @@ function buildPallet(colors, pxSize = 10) {
  * Each div in the returned HTML collection represents a pixel and has
  * an event listener attached to set their color to the current brushColor.
  */
-function buildCanvas(height = 100, width = 100, pxSize = 10) {
+function buildCanvas(height = 100, width = 100, pxSize = 13) {
   let canvas = document.getElementById('canvas');
 
   for(let i = 0; i < width; i++) {

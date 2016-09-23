@@ -29,3 +29,11 @@ body {
   cursor: default;
   margin: 10px auto;
 }
+
+#gradient-section {
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+  margin: 10px auto;
+  width: 100px;
+}
