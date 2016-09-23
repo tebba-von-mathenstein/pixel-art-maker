@@ -5,12 +5,23 @@ const PALLET_PIXEL_CLASS = 'pallet-pixel';
 const CANVAS_PIXEL_CLASS = 'canvas-pixel';
 
 // TODO: globl brush color is not ideal, figure out how to fix this...
-let brushColor = 'red';
+let brushColor = 'white';
+
+// We track the current state of the mouse globally for drawing purposes
+let mouseIsDown = false;
 
 // MAIN ENTRY
 window.onload = function main() {
   buildPallet(undefined, 30);
   buildCanvas(40, 40, 13);
+
+  window.addEventListener('mousedown', function() {
+    mouseIsDown = true;
+  });
+
+  window.addEventListener('mouseup', function() {
+    mouseIsDown = false;
+  });
 }
 
 /**
@@ -56,6 +67,7 @@ function buildCanvas(height = 100, width = 100, pxSize = 10) {
       curDiv.className = 'canvas-pixel';
       curDiv.style.height = pxSize + 'px';
       curDiv.style.width = pxSize + 'px';
+      curDiv.addEventListener('mouseenter', enterPixelHandler);
 
       canvas.appendChild(curDiv);
     }
@@ -64,21 +76,45 @@ function buildCanvas(height = 100, width = 100, pxSize = 10) {
   // Fit the canvas to the pixel size -- not "responsively" because pixel art isn't "responsive".
   canvas.style.width = ((width) * (pxSize+2)) + 'px';
   canvas.style.height = ((height) * (pxSize+2)) + 'px';
-  canvas.addEventListener('click', setBackgroundColorHandler);
+
+  canvas.addEventListener('click', clickCanvasHandler);
+
+}
+
+/**
+ * Given an element (hopefully represneting a pixel) set it's color and backgroundColor
+ * to the current brushColor
+ */
+function setPixelColor(pixelElement) {
+  pixelElement.style.borderColor = brushColor;
+  pixelElement.style.backgroundColor = brushColor;
 }
 
 /**
  * An event handler to set the background color of the target element to the current
  * brushColor.
  */
-function setBackgroundColorHandler(event) {
+function clickCanvasHandler(event) {
   // Never color the whole canvas
   if(event.target === event.currentTarget) {
     return;
   }
 
-  event.target.style.borderColor = brushColor;
-  event.target.style.backgroundColor = brushColor;
+  setPixelColor(event.target);
+}
+
+/* *
+ * An event handler for when the mouse enters a pixel. If the mouse
+ * is currently down color the pixel with the current brush color.
+ */
+function enterPixelHandler(event) {
+  // If the mouse isn't down, we don't color
+  // if we're entering the canvas, not the pixel we don't color
+  if(!mouseIsDown) {
+    return;
+  }
+
+  setPixelColor(event.target);
 }
 
 
