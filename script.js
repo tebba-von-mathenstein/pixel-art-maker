@@ -9,8 +9,8 @@ let brushColor = 'red';
 
 // MAIN ENTRY
 window.onload = function main() {
-  buildPallet(undefined, 20);
-  buildCanvas(80, 80, 7);
+  buildPallet(undefined, 30);
+  buildCanvas(40, 40, 13);
 }
 
 /**
@@ -21,7 +21,7 @@ function buildPallet(colors, pxSize = 10) {
   let pallet = document.getElementById('pallet');
 
   if(colors === undefined) {
-    colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+    colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'white'];
   }
 
   for(let i = 0; i < colors.length; i++) {
