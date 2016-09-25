@@ -1,5 +1,10 @@
 "use strict"
 
+// TODO: Global variable for this is not ideal, solve this
+// probably by making a wrapper class for the Canvas.
+let canvasCtx;
+let pixelSize;
+
 /**
   This function creates a heigth by width grid of divs and attaches them to the canvas.
   Each div in the returned HTML collection represents a pixel and has
@@ -15,37 +20,51 @@
 function buildCanvas(height = 100, width = 100, pxSize = 13) {
   let canvas = document.getElementById('canvas');
 
-  for(let i = 0; i < width; i++) {
-    for(let j = 0; j < height; j++) {
-      let curDiv = document.createElement('div');
-
-      curDiv.className = 'canvas-pixel';
-      curDiv.style.height = pxSize + 'px';
-      curDiv.style.width = pxSize + 'px';
-      curDiv.addEventListener('mouseenter', enterPixelHandler);
-
-      canvas.appendChild(curDiv);
-    }
+  if(!canvas.getContext) {
+    throw Error("The element with id='canvas' does not seem to be an HTML5 canvas element.");
   }
 
-  // Fit the canvas to the pixel size -- not "responsively" because pixel art isn't "responsive".
-  canvas.style.width = ((width) * (pxSize+2)) + 'px';
-  canvas.style.height = ((height) * (pxSize+2)) + 'px';
+  // Sets a global, part of a TODO: unglobalize.
+  canvasCtx = canvas.getContext('2d');
+  pixelSize = pxSize;
 
-  canvas.addEventListener('click', clickCanvasHandler);
+  // Set the canvas to the proper size
+  canvas.height = (height * pxSize);
+  canvas.width = (width * pxSize);
+
+  // Initially fill the canvas with white
+  canvasCtx.fillStyle = "white";
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw the horizontal lines
+  for(let i = 0; i <= height; i++) {
+    let currentHeight = i * pxSize;
+
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(0, currentHeight);
+    canvasCtx.lineTo(canvas.width, currentHeight);
+    canvasCtx.stroke();
+  }
+
+  // Draw the vertical lines
+  for(let i = 0; i <= width; i++) {
+    let currentWidth = i * pxSize;
+
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(currentWidth, 0);
+    canvasCtx.lineTo(currentWidth, canvas.height);
+    canvasCtx.stroke();
+  }
+
+  canvas.addEventListener('mousedown', mouseDownCanvasHandler);
 }
 
 /**
  * An event handler to set the background color of the target element to the current
  * brushColor.
  */
-function clickCanvasHandler(event) {
-  // Never color the whole canvas
-  if(event.target === event.currentTarget) {
-    return;
-  }
-
-  setPixelColor(event.target);
+function mouseDownCanvasHandler(event) {
+  setPixelColor(event);
 }
 
 /* *
@@ -59,14 +78,28 @@ function enterPixelHandler(event) {
     return;
   }
 
-  setPixelColor(event.target);
+  setPixelColor(event);
 }
 
 /**
  * Given an element (hopefully represneting a pixel) set it's color and backgroundColor
  * to the current brushColor
  */
-function setPixelColor(pixelElement) {
-  pixelElement.style.borderColor = brushColor;
-  pixelElement.style.backgroundColor = brushColor;
+function setPixelColor(event) {
+  var x;
+  var y;
+  var startX;
+  var startY;
+
+  // Get the relative position (offset) within the canvas
+  x = event.offsetX; // column or x-axis
+  y = event.offsetY; // row or y-axis
+
+  // Determine the top-left of the pixel we are in
+  startX = Math.floor(x / pixelSize) * pixelSize;
+  startY = Math.floor(y / pixelSize) * pixelSize;
+
+  // Fill the square with the brushColor
+  canvasCtx.fillStyle = brushColor;
+  canvasCtx.fillRect(startX, startY, pixelSize, pixelSize);
 }
