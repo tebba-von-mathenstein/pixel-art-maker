@@ -30,7 +30,7 @@ window.onload = function main() {
 
 function handleGradientGeneration(event) {
   var newColors = createGradient();
-  buildPallet(newColors);
+  buildPallet(newColors, 30);
 }
 
 /**
