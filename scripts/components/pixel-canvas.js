@@ -6,6 +6,10 @@ class PixelCanvasProto extends HTMLElement {
     super();
   }
 
+  attachedCallback() {
+    this.constructGrid(25, 25, 20, 'white');
+  }
+
   /**
     This function creates a heigth by width grid of divs and attaches them to the canvas.
     Each div in the returned HTML collection represents a pixel and has
@@ -18,7 +22,7 @@ class PixelCanvasProto extends HTMLElement {
     @param {integer} pixelSize - (optional, default = 10) The height and width of
       the individual pixels.
   */
-  attachedCallback(width = 50, height = 50, pixelSize = 10, initialBackground = 'white') {
+  constructGrid(width = 50, height = 50, pixelSize = 10, initialBackground = 'white') {
     this.width = width;
     this.height = height;
     this.pixelSize = pixelSize;

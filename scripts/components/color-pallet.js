@@ -6,6 +6,10 @@ class ColorPalletProto extends HTMLElement {
     super();
   }
 
+  attachedCallback() {
+    this.buildPallet();
+  }
+
   /**
     Builds the color pallet out of an array of input colors. Each item in the pallet
     is a div, and has an event listener which sets the brush color on click.
@@ -16,10 +20,6 @@ class ColorPalletProto extends HTMLElement {
     @param {integer} pxSize - (optional, default = 30) The height and width of
       the pallet square.
   */
-  attachedCallback() {
-    this.buildPallet();
-  }
-
   buildPallet(colors, pxSize = 30) {
     // Rebuild if need be
     this.innerHTML = '';
