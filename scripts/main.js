@@ -10,7 +10,6 @@ let mouseIsDown = false;
 // MAIN ENTRY
 window.onload = function main() {
   buildPallet(undefined, 30);
-  buildCanvas(40, 40, 13);
 
   // Capture mouse state for click and drag features
   window.addEventListener('mousedown', function() {
