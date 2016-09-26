@@ -9,16 +9,16 @@ class PixelCanvasProto extends HTMLElement {
   /**
     This function creates a heigth by width grid of divs and attaches them to the canvas.
     Each div in the returned HTML collection represents a pixel and has
-    an event listener attached to set their color to the current brushColor.
+    an event listener attached to set their color to the current this.colorPallet.brushColor.
 
-    @param {integer} height - (optional, default=100) the number of pixels
+    @param {integer} height - (optional, default=50) the number of pixels
       tall the canvas will be.
-    @param {integer} width - (optional, default=100) the number of pixels
+    @param {integer} width - (optional, default=50) the number of pixels
         wide the canvas will be.
-    @param {integer} pixelSize - (optional, default = 30) The height and width of
+    @param {integer} pixelSize - (optional, default = 10) The height and width of
       the individual pixels.
   */
-  attachedCallback(width = 100, height = 100, pixelSize = 10, initialBackground = 'white') {
+  attachedCallback(width = 50, height = 50, pixelSize = 10, initialBackground = 'white') {
     this.width = width;
     this.height = height;
     this.pixelSize = pixelSize;
@@ -43,7 +43,10 @@ class PixelCanvasProto extends HTMLElement {
 
     // Set the canvas to the proper size
     this.canvas.width = (this.width * this.pixelSize);
+    this.style.width = (this.width * this.pixelSize) + 'px';
+
     this.canvas.height = (this.height * this.pixelSize);
+    this.style.height = (this.height * this.pixelSize) + 'px';
 
     // Initially fill the this.canvas with white
     this.canvasCtx.fillStyle = initialBackground;
@@ -74,6 +77,31 @@ class PixelCanvasProto extends HTMLElement {
   }
 
   /**
+    paint the pixel that some MouseEvent is being fired for.
+
+    @param {MouseEvent} mouseEvent - the event being triggered
+  */
+  _paintAtMousePixel(mouseEvent) {
+    // Get the relative position (offset) within the canvas
+    let x = mouseEvent.offsetX;
+    let y = mouseEvent.offsetY;
+
+    // Determine the top-left of the pixel we are in
+    let pixelX = Math.floor(x / this.pixelSize) * this.pixelSize;
+    let pixelY = Math.floor(y / this.pixelSize) * this.pixelSize;
+
+
+    // Fill the square with the this.colorPallet.brushColor
+    // TODO: change to something like [currentPixel].triggerMouseEnter
+    this.canvasCtx.fillStyle = this.colorPallet.brushColor;
+    this.canvasCtx.fillRect(pixelX, pixelY, this.pixelSize, this.pixelSize);
+  }
+
+  setColorPallet(colorPallet) {
+    this.colorPallet = colorPallet;
+  }
+
+  /**
     Mosemove event master handler, determines which pixel the mouse is
     in trigger it's appropriate behavior.
 
@@ -95,27 +123,6 @@ class PixelCanvasProto extends HTMLElement {
    */
    _mouseDownEventHandler(mouseClickEvent) {
      this._paintAtMousePixel(mouseClickEvent);
-  }
-
-  /**
-    paint the pixel that some MouseEvent is being fired for.
-
-    @param {MouseEvent} mouseEvent - the event being triggered
-  */
-  _paintAtMousePixel(mouseEvent) {
-    // Get the relative position (offset) within the canvas
-    let x = mouseEvent.offsetX;
-    let y = mouseEvent.offsetY;
-
-    // Determine the top-left of the pixel we are in
-    let pixelX = Math.floor(x / this.pixelSize) * this.pixelSize;
-    let pixelY = Math.floor(y / this.pixelSize) * this.pixelSize;
-
-
-    // Fill the square with the brushColor
-    // TODO: change to something like [currentPixel].triggerMouseEnter
-    this.canvasCtx.fillStyle = brushColor;
-    this.canvasCtx.fillRect(pixelX, pixelY, this.pixelSize, this.pixelSize);
   }
 }
 

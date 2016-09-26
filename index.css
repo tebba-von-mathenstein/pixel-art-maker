@@ -2,7 +2,12 @@ body {
   background-color: #8FBC8F; /* a pleasent green */
 }
 
-.pallet-pixel {
+.brush-square {
+  border: 3px solid black;
+  margin-left: 5px;
+}
+
+.pallet-square {
   background-color: white;
   border: 1px solid black;
 }
@@ -17,10 +22,12 @@ body {
 }
 
 #canvas {
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
   cursor: default;
   margin: auto;
+
+  border: 3px solid black;
+  border-radius: 5px;
 }
 
 #pallet {
@@ -31,8 +38,6 @@ body {
 }
 
 #gradient-section {
-  display: flex;
-  flex-wrap: wrap;
   cursor: default;
   margin: 10px auto;
   width: 100px;
