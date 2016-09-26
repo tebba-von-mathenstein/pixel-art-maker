@@ -6,17 +6,19 @@
 
     <link rel="stylesheet" href="index.css">
     <script src="scripts/colorTools.js"></script>
+    <script src="scripts/components/pixel-canvas.js"></script>
+    <script src="scripts/components/color-pallet.js"></script>
     <script src="scripts/main.js"></script>
   </head>
   <body>
     <div id="outer-container">
-      <section id="pallet"></section>
+      <color-pallet id="pallet"></color-pallet>
       <section id="gradient-section">
         <input type="color" id="gradient-start-pixel" value="#ffffff">
         <input type="color" id="gradient-end-pixel" value="#ffffff">
         <input id="generate-gradient-button" type="button" value="generate-gradient">
       </section>
-      <section id="canvas"></section>
+      <pixel-canvas id="canvas"></canvas>
     </div>
   </body>
 </html>
