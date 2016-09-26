@@ -2,6 +2,22 @@ body {
   background-color: #8FBC8F; /* a pleasent green */
 }
 
+pixel-canvas {
+  display: block;
+  cursor: default;
+  margin: auto;
+
+  border: 3px solid black;
+  border-radius: 5px;
+}
+
+color-pallet {
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+  margin: 10px auto;
+}
+
 .brush-square {
   border: 3px solid black;
   margin-left: 5px;
@@ -19,22 +35,6 @@ body {
 
 #outer-container {
   width: 100%
-}
-
-#canvas {
-  display: block;
-  cursor: default;
-  margin: auto;
-
-  border: 3px solid black;
-  border-radius: 5px;
-}
-
-#pallet {
-  display: flex;
-  flex-wrap: wrap;
-  cursor: default;
-  margin: 10px auto;
 }
 
 #gradient-section {

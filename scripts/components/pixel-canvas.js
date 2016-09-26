@@ -23,6 +23,10 @@ class PixelCanvasProto extends HTMLElement {
     this.height = height;
     this.pixelSize = pixelSize;
 
+    // Create the wrapped ColorPallet and insert it as a sibling above.
+    this.colorPallet = document.createElement('color-pallet');
+    this.parentNode.insertBefore(this.colorPallet, this);
+
     // Create the wrapped canvas element, and insert it. Initializing two variables.
     this.canvas;
     this.canvasCtx;
@@ -74,6 +78,17 @@ class PixelCanvasProto extends HTMLElement {
 
     this.addEventListener('mousemove', this._mouseMoveEventHandler);
     this.addEventListener('mousedown', this._mouseDownEventHandler);
+
+    // Listen on window but bind this in the event handler to be
+    // this PixelCanvas, instead of window. (=> for lexical binding)
+    // Capture mouse state for click and drag features
+    window.addEventListener('mousedown', () => {
+      this.mouseIsDown = true;
+    });
+
+    window.addEventListener('mouseup', () => {
+      this.mouseIsDown = false;
+    });
   }
 
   /**
@@ -97,10 +112,6 @@ class PixelCanvasProto extends HTMLElement {
     this.canvasCtx.fillRect(pixelX, pixelY, this.pixelSize, this.pixelSize);
   }
 
-  setColorPallet(colorPallet) {
-    this.colorPallet = colorPallet;
-  }
-
   /**
     Mosemove event master handler, determines which pixel the mouse is
     in trigger it's appropriate behavior.
@@ -110,7 +121,7 @@ class PixelCanvasProto extends HTMLElement {
    _mouseMoveEventHandler(mouseMoveEvent) {
      // Ignore entry if mouse is up
      // TODO: highlight pixels that will be affected maybe?
-     if(!mouseIsDown) return;
+     if(!this.mouseIsDown) return;
 
      this._paintAtMousePixel(mouseMoveEvent);
   }

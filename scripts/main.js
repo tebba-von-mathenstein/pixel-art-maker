@@ -1,28 +1,8 @@
 "use strict"
 
-// Constants... these are referenced in css files, if you change them beware!
-const PALLET_PIXEL_CLASS = 'pallet-pixel';
-const CANVAS_PIXEL_CLASS = 'canvas-pixel';
-
-// We track the current state of the mouse globally for drawing purposes
-let mouseIsDown = false;
-
 // MAIN ENTRY
 window.onload = function main() {
-
-  let colorPallet = document.getElementById('pallet');
-  let pxCanvas = document.getElementById('canvas');
-  pxCanvas.setColorPallet(colorPallet);
-
-  // TODO: Sharing global mouse down state seems awkward...
-  // Capture mouse state for click and drag features
-  window.addEventListener('mousedown', function() {
-    mouseIsDown = true;
-  });
-
-  window.addEventListener('mouseup', function() {
-    mouseIsDown = false;
-  });
+  let pxCanvas = document.getElementById('pixel-canvas');
 
   // Bind the generate gradient event
   document.getElementById('generate-gradient-button').addEventListener('click', handleGradientGeneration);
@@ -43,6 +23,6 @@ window.onload = function main() {
     var newColors = createGradient(startColorHex, endColorHex);
 
     // colorPallet is closed over in this context.
-    colorPallet.buildPallet(newColors, 30);
+    pxCanvas.colorPallet.buildPallet(newColors, 30);
   }
 }

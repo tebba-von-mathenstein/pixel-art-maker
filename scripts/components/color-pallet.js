@@ -57,6 +57,7 @@ class ColorPalletProto extends HTMLElement {
 
     let twoThirdsWidth = Math.floor(2 * window.innerWidth / 3);
 
+    // TODO: Several "Magic Numbers" due to css reliance. Fix somehow.
     let brushSquareWidth = pxSize + 11;
     let palletSquaresWidth = this.colors.length * (pxSize+2);
     this.style.width = Math.min(twoThirdsWidth,  brushSquareWidth + palletSquaresWidth) + 'px';
