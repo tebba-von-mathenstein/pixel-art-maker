@@ -23,6 +23,6 @@ window.onload = function main() {
     var newColors = createGradient(startColorHex, endColorHex);
 
     // colorPallet is closed over in this context.
-    pxCanvas.colorPallet.buildPallet(newColors, 30);
+    pxCanvas.colorPallet.addPalletRow(newColors, 30);
   }
 }

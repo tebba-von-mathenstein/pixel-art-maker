@@ -27,10 +27,6 @@ class PixelCanvasProto extends HTMLElement {
     this.height = height;
     this.pixelSize = pixelSize;
 
-    // Create the wrapped ColorPallet and insert it as a sibling above.
-    this.colorPallet = document.createElement('color-pallet');
-    this.parentNode.insertBefore(this.colorPallet, this);
-
     // Create the wrapped canvas element, and insert it. Initializing two variables.
     this.canvas;
     this.canvasCtx;
@@ -55,6 +51,11 @@ class PixelCanvasProto extends HTMLElement {
 
     this.canvas.height = (this.height * this.pixelSize);
     this.style.height = (this.height * this.pixelSize) + 'px';
+
+    // Create the wrapped ColorPallet and insert it as a sibling above.
+    this.colorPallet = document.createElement('color-pallet');
+    this.colorPallet.init(30, this.style.height, this.style.width);
+    this.parentNode.insertBefore(this.colorPallet, this);
 
     // Initially fill the this.canvas with white
     this.canvasCtx.fillStyle = initialBackground;
