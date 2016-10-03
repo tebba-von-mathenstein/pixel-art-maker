@@ -35,6 +35,56 @@ class PixelCanvasProto extends HTMLElement {
   }
 
   /**
+    Fetch the current canvas state and turn it into a
+    JSON string representing the canvas.
+
+    First we turn the data into a 2D array where each
+    entry is the color hash of the pixels current
+    background color. Then we JSON.stringify that array.
+
+    @return {string} - a string produced by calling JSON.strigify on
+      a 2D Array containing color hex values, such as '#ffffff' for white.
+  */
+  serializeGrid() {
+    let grid = [];
+
+    for(let h = 0; h < this.height; h++) {
+      let row = [];
+      grid[h] = row;
+
+      for(let w = 0; w < this.width; w++) {
+
+          let offset = 2; // Never look where the grid-lines are drawn
+          let x = (this.pixelSize * w) + offset;
+          let y = (this.pixelSize * h) + offset;
+
+          // TODO: may want to pull this into a function
+          let [red, green, blue] = this.canvasCtx.getImageData(x, y, 1, 1).data;
+          let color = createRBG(red, green, blue);
+          let hex =  rgbToHex(color);
+
+          row[w] = hex;
+      }
+    }
+
+    return JSON.stringify(grid);
+  }
+
+  /**
+    Read the string format retured from _serializeCanvas and return
+    a set of HTML elements representing the state of the canvas.
+
+    @param {string} serializedInput - a string in the format returned from
+      _serializeCanvas();
+
+    @return {HTMLElement} - a set of HTML elements that can be used as the
+      innerHTML of the canvas.
+  */
+  deserializeGrid(serializedInput) {
+
+  }
+
+  /**
     Helper function to the constructor - this function is responsible for
     creating the HTMLCanvas element and intializeing it:
       * setting the proper size,

@@ -2,7 +2,8 @@
 
 // MAIN ENTRY
 window.onload = function main() {
-  let pxCanvas = document.getElementById('pixel-canvas');
+  // GLOBAL CUZ YOLO
+  window.pxCanvas = document.getElementById('pixel-canvas');
 
   // Bind the generate gradient event
   document.getElementById('generate-gradient-button').addEventListener('click', handleGradientGeneration);
@@ -19,10 +20,8 @@ window.onload = function main() {
   function handleGradientGeneration() {
     let startColorHex = document.getElementById('gradient-start-pixel').value;
     let endColorHex = document.getElementById('gradient-end-pixel').value;
-
     var newColors = createGradient(startColorHex, endColorHex);
 
-    // colorPallet is closed over in this context.
     pxCanvas.colorPallet.addPalletRow(newColors, 30);
   }
 }
