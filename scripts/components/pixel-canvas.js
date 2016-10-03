@@ -6,6 +6,10 @@ class PixelCanvasProto extends HTMLElement {
     super();
   }
 
+  attachedCallback() {
+    this.constructGrid(25, 25, 20, 'white');
+  }
+
   /**
     This function creates a heigth by width grid of divs and attaches them to the canvas.
     Each div in the returned HTML collection represents a pixel and has
@@ -18,7 +22,7 @@ class PixelCanvasProto extends HTMLElement {
     @param {integer} pixelSize - (optional, default = 10) The height and width of
       the individual pixels.
   */
-  attachedCallback(width = 50, height = 50, pixelSize = 10, initialBackground = 'white') {
+  constructGrid(width = 50, height = 50, pixelSize = 10, initialBackground = 'white') {
     this.width = width;
     this.height = height;
     this.pixelSize = pixelSize;
@@ -48,6 +52,11 @@ class PixelCanvasProto extends HTMLElement {
     this.canvas.height = (this.height * this.pixelSize);
     this.style.height = (this.height * this.pixelSize) + 'px';
 
+    // Create the wrapped ColorPallet and insert it as a sibling above.
+    this.colorPallet = document.createElement('color-pallet');
+    this.colorPallet.init(30, this.style.height, this.style.width);
+    this.parentNode.insertBefore(this.colorPallet, this);
+
     // Initially fill the this.canvas with white
     this.canvasCtx.fillStyle = initialBackground;
     this.canvasCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -74,6 +83,17 @@ class PixelCanvasProto extends HTMLElement {
 
     this.addEventListener('mousemove', this._mouseMoveEventHandler);
     this.addEventListener('mousedown', this._mouseDownEventHandler);
+
+    // Listen on window but bind this in the event handler to be
+    // this PixelCanvas, instead of window. (=> for lexical binding)
+    // Capture mouse state for click and drag features
+    window.addEventListener('mousedown', () => {
+      this.mouseIsDown = true;
+    });
+
+    window.addEventListener('mouseup', () => {
+      this.mouseIsDown = false;
+    });
   }
 
   /**
@@ -97,10 +117,6 @@ class PixelCanvasProto extends HTMLElement {
     this.canvasCtx.fillRect(pixelX, pixelY, this.pixelSize, this.pixelSize);
   }
 
-  setColorPallet(colorPallet) {
-    this.colorPallet = colorPallet;
-  }
-
   /**
     Mosemove event master handler, determines which pixel the mouse is
     in trigger it's appropriate behavior.
@@ -110,7 +126,7 @@ class PixelCanvasProto extends HTMLElement {
    _mouseMoveEventHandler(mouseMoveEvent) {
      // Ignore entry if mouse is up
      // TODO: highlight pixels that will be affected maybe?
-     if(!mouseIsDown) return;
+     if(!this.mouseIsDown) return;
 
      this._paintAtMousePixel(mouseMoveEvent);
   }

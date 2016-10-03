@@ -2,8 +2,59 @@
 
 class ColorPalletProto extends HTMLElement {
 
+  static get PALLET_CONTAINER_CLASS() {
+    return 'pallet-container';
+  }
+
   constructor() {
     super();
+  }
+
+  init(palletPxSize = 30, cssWidth) {
+    this.pxSize = palletPxSize;
+
+    if(cssWidth) {
+      this.style.width = cssWidth;
+    }
+  }
+
+  /**
+    Called when the element gets added to the page - this sets a container
+    for all the pallet rows, and the brush square.
+  */
+  attachedCallback() {
+    this.palletContainer = document.createElement('div');
+    this.palletContainer.className = ColorPalletProto.PALLET_CONTAINER_CLASS;
+    this.palletContainer.style.margin = 'auto';
+    this.appendChild(this.palletContainer);
+
+    this.brushSquare = document.createElement('div');
+    this.brushSquare.className = 'brush-square';
+    this.brushSquare.style.height = this.pxSize + 'px';
+    this.brushSquare.style.width = this.pxSize + 'px';
+    this.brushSquare.style.backgroundColor = 'white';
+    this.brushSquare.style.margin = '5px auto';
+
+
+    this.appendChild(this.brushSquare);
+
+    this.addPalletRow();
+  }
+
+  /**
+    Replace all the current color pallets with a new one using the provided colors
+  */
+  replacePallet(colors) {
+    this.palletContainer.innerHTML = '';
+    this.addPalletRow(colors);
+  }
+
+  /**
+    add to the the current color pallets  a new one using the provided colors
+  */
+  addPalletRow(colors) {
+    let newRow = this.buildPallet(colors)
+    this.palletContainer.appendChild(newRow);
   }
 
   /**
@@ -16,50 +67,36 @@ class ColorPalletProto extends HTMLElement {
     @param {integer} pxSize - (optional, default = 30) The height and width of
       the pallet square.
   */
-  attachedCallback() {
-    this.buildPallet();
-  }
-
-  buildPallet(colors, pxSize = 30) {
-    // Rebuild if need be
-    this.innerHTML = '';
+  buildPallet(colors) {
+    let newPalletRow = document.createElement('div');
+    newPalletRow.style.display = 'flex';
+    newPalletRow.style.margin = '5px auto';
 
     // Default is "rainbow"
     this.colors = colors || ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'white', 'black'];
     this.brushColor = this.colors[0];
-    this.brushDiv;
 
     // Make a div for each
-    for(let i = 0; i < this.colors.length + 1; i++) {
-      let curDiv = document.createElement('div');
+    for(let i = 0; i < this.colors.length; i++) {
+      let curSquare = document.createElement('span');
 
-      curDiv.style.height = pxSize + 'px';
-      curDiv.style.width = pxSize + 'px';
-      curDiv.style.backgroundColor = this.colors[i];
+      curSquare.className = 'pallet-square';
+      curSquare.style.height = this.pxSize + 'px';
+      curSquare.style.width = this.pxSize + 'px';
+      curSquare.style.backgroundColor = this.colors[i];
 
-      // Final pass, do the brush instead of a pallet square
-      let isFinalPass = i === this.colors.length;
-      if(isFinalPass) {
-        curDiv.className = 'brush-square';
-        curDiv.style.backgroundColor = this.brushColor;
-
-        this.brushDiv = curDiv;
-      }
-      else {
-        curDiv.className = 'pallet-square';
-
-        // bind to keep 'this' being the color pallet not the individual divs
-        curDiv.addEventListener('click', this._setBrushColorHandler.bind(this));
-      }
-
-      this.appendChild(curDiv);
+      // bind to keep 'this' being the color pallet not the individual divs
+      curSquare.addEventListener('click', this._setBrushColorHandler.bind(this));
+      newPalletRow.appendChild(curSquare);
     }
 
     let twoThirdsWidth = Math.floor(2 * window.innerWidth / 3);
 
-    let brushSquareWidth = pxSize + 11;
-    let palletSquaresWidth = this.colors.length * (pxSize+2);
-    this.style.width = Math.min(twoThirdsWidth,  brushSquareWidth + palletSquaresWidth) + 'px';
+    // TODO: Several "Magic Numbers" due to css reliance. Fix somehow.
+    let palletSquaresWidth = this.colors.length * (this.pxSize+2);
+    newPalletRow.style.width = Math.min(twoThirdsWidth, palletSquaresWidth) + 'px';
+
+    return newPalletRow;
   }
 
   /**
@@ -70,7 +107,7 @@ class ColorPalletProto extends HTMLElement {
    */
   _setBrushColorHandler(event) {
     this.brushColor = event.target.style.backgroundColor;
-    this.brushDiv.style.backgroundColor = this.brushColor;
+    this.brushSquare.style.backgroundColor = this.brushColor;
   }
 }
 
