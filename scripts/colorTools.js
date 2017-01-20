@@ -1,5 +1,13 @@
 "use strict"
 
+function createRBG(red, green, blue) {
+  return {
+    red: red,
+    green: green,
+    blue: blue
+  };
+}
+
 /**
   Given a color hex string (such as '#ffffff' for white) return an object
   with 3 properties (red, green, blue) all assigned to their integer
