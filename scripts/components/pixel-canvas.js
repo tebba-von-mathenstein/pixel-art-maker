@@ -142,4 +142,4 @@ class PixelCanvasProto extends HTMLElement {
   }
 }
 
-const PixelCanvas = document.registerElement('pixel-canvas', PixelCanvasProto);
+const PixelCanvas = window.customElements.define('pixel-canvas', PixelCanvasProto);

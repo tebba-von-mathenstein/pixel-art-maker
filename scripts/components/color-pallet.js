@@ -111,4 +111,4 @@ class ColorPalletProto extends HTMLElement {
   }
 }
 
-const ColorPallet = document.registerElement('color-pallet', ColorPalletProto);
+const ColorPallet = window.customElements.define('color-pallet', ColorPalletProto);
