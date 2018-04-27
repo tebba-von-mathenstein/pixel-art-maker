@@ -6,7 +6,7 @@ class PixelCanvasProto extends HTMLElement {
     super();
   }
 
-  attachedCallback() {
+  connectedCallback() {
     this.constructGrid(25, 25, 20, 'white');
   }
 

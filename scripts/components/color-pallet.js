@@ -22,7 +22,7 @@ class ColorPalletProto extends HTMLElement {
     Called when the element gets added to the page - this sets a container
     for all the pallet rows, and the brush square.
   */
-  attachedCallback() {
+  connectedCallback() {
     this.palletContainer = document.createElement('div');
     this.palletContainer.className = ColorPalletProto.PALLET_CONTAINER_CLASS;
     this.palletContainer.style.margin = 'auto';
