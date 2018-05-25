@@ -1,6 +1,6 @@
 # Pixel Art Maker
 
-This simplistic pixel art maker is an experiment in using Web Components and HTML5 Canvas.  There are (currently) two main Components, PixelCanvas and ColorPallet. For now, the PixelCanvas is dependent on the ColorPallet. The live version can be found on [github pages](https://teb311.github.io/pixel-art-maker).
+This simplistic pixel art maker is an experiment in using Web Components and HTML5 Canvas.  There are (currently) two main Components, PixelCanvas and ColorPallet. For now, the PixelCanvas is dependent on the ColorPallet. The live version can be found on [github pages](https://tebba-von-mathenstein.github.io/pixel-art-maker).
 
 ## Running The Code
 
